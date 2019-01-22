@@ -246,7 +246,7 @@ func (serveMux *serveMux) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	handlers := admin.router.routers[strings.ToUpper(req.Method)]
 	for _, handler := range handlers {
-		if params, _, ok := utils.ParamsMatch(handler.Path, RelativePath); ok && handler.HasPermission(permissionMode, context.Context) {
+		if params, _, ok := utils.ParamsMatch(handler.Path, RelativePath,handler.Config.NoExtension); ok && handler.HasPermission(permissionMode, context.Context) {
 			if len(params) > 0 {
 				req.URL.RawQuery = url.Values(params).Encode() + "&" + req.URL.RawQuery
 			}
@@ -298,8 +298,8 @@ func (admin *Admin) RegisterResourceRouters(res *Resource, actions ...string) {
 				res.RegisterRoute("GET", path.Join(primaryKeyParams, "edit"), adminController.Edit, &RouteConfig{PermissionMode: roles.Update})
 
 				// Update
-				res.RegisterRoute("POST", primaryKeyParams, adminController.Update, &RouteConfig{PermissionMode: roles.Update})
-				res.RegisterRoute("PUT", primaryKeyParams, adminController.Update, &RouteConfig{PermissionMode: roles.Update})
+ 				res.RegisterRoute("POST", primaryKeyParams, adminController.Update, &RouteConfig{PermissionMode: roles.Update,NoExtension:res.Config.NoExtension})
+				res.RegisterRoute("PUT", primaryKeyParams, adminController.Update, &RouteConfig{PermissionMode: roles.Read,NoExtension:res.Config.NoExtension})
 			}
 		case "read":
 			if res.Config.Singleton {
@@ -315,7 +315,7 @@ func (admin *Admin) RegisterResourceRouters(res *Resource, actions ...string) {
 		case "delete":
 			if !res.Config.Singleton {
 				// Delete
-				res.RegisterRoute("DELETE", primaryKeyParams, adminController.Delete, &RouteConfig{PermissionMode: roles.Delete})
+				res.RegisterRoute("DELETE", primaryKeyParams, adminController.Delete, &RouteConfig{PermissionMode: roles.Delete,NoExtension:res.Config.NoExtension})
 			}
 		}
 	}

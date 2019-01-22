@@ -1217,7 +1217,9 @@ func (context *Context) pageTitle() template.HTML {
 	}
 
 	var resourceName string
-	if usePlural {
+	if context.Resource.Config.Label != "" {
+		resourceName = context.Resource.Config.Label
+	} else if usePlural {
 		resourceName = string(context.t(fmt.Sprintf("%v.name.plural", context.Resource.ToParam()), inflection.Plural(context.Resource.Name)))
 	} else {
 		resourceName = string(context.t(fmt.Sprintf("%v.name", context.Resource.ToParam()), context.Resource.Name))

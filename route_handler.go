@@ -12,6 +12,7 @@ type RouteConfig struct {
 	Resource       *Resource
 	Permissioner   HasPermissioner
 	PermissionMode roles.PermissionMode
+	NoExtension    bool // ingnore extension part on route handler
 	Values         map[interface{}]interface{}
 }
 

@@ -19,6 +19,7 @@ import (
 // Config resource config struct
 type Config struct {
 	Name       string
+	Label   string
 	IconName   string
 	Menu       []string
 	Permission *roles.Permission
@@ -26,6 +27,7 @@ type Config struct {
 	Priority   int
 	Singleton  bool
 	Invisible  bool
+	NoExtension bool // no extension part for routing
 	PageCount  int
 }
 
@@ -74,11 +76,11 @@ func (res *Resource) ToParam() string {
 		}); ok {
 			res.params = value.ToParam()
 		} else {
-			if res.Config.Singleton == true {
-				res.params = utils.ToParamString(res.Name)
-			} else {
-				res.params = utils.ToParamString(inflection.Plural(res.Name))
-			}
+			//if res.Config.Singleton == true {
+			res.params = utils.ToParamString(res.Name)
+			//} else {
+			//	res.params = utils.ToParamString(inflection.Plural(res.Name))
+			//}
 		}
 	}
 	return res.params

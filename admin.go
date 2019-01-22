@@ -156,6 +156,7 @@ func (admin *Admin) newResource(value interface{}, config ...*Config) *Resource 
 		res.Name = namer.ResourceName()
 	}
 
+
 	// Configure resource when initializing
 	modelType := utils.ModelType(res.Value)
 	for i := 0; i < modelType.NumField(); i++ {
@@ -208,9 +209,14 @@ func (admin *Admin) AddResource(value interface{}, config ...*Config) *Resource 
 			Modes:      []string{"menu_item"},
 		})
 
-		menuName := res.Name
-		if !res.Config.Singleton {
-			menuName = inflection.Plural(res.Name)
+		var menuName string
+		if res.Config.Label != "" {
+			menuName = res.Config.Label
+		} else {
+			menuName = res.Name
+			if !res.Config.Singleton {
+				menuName = inflection.Plural(res.Name)
+			}
 		}
 		admin.AddMenu(&Menu{Name: menuName, IconName: res.Config.IconName, Permissioner: res, Priority: res.Config.Priority, Ancestors: res.Config.Menu, RelativePath: res.ToParam()})
 
