@@ -281,21 +281,21 @@ func (admin *Admin) RegisterResourceRouters(res *Resource, actions ...string) {
 		case "create":
 			if !res.Config.Singleton {
 				// New
-				res.RegisterRoute("GET", "/new", adminController.New, &RouteConfig{PermissionMode: roles.Create})
+				res.RegisterRoute("GET", "/new", adminController.New, &RouteConfig{PermissionMode: roles.Create,NoExtension:res.Config.NoExtension})
 			}
 
 			// Create
-			res.RegisterRoute("POST", "/", adminController.Create, &RouteConfig{PermissionMode: roles.Create})
+			res.RegisterRoute("POST", "/", adminController.Create, &RouteConfig{PermissionMode: roles.Create,NoExtension:res.Config.NoExtension})
 		case "update":
 			if res.Config.Singleton {
 				// Edit
-				res.RegisterRoute("GET", "/edit", adminController.Edit, &RouteConfig{PermissionMode: roles.Update})
+				res.RegisterRoute("GET", "/edit", adminController.Edit, &RouteConfig{PermissionMode: roles.Update,NoExtension:res.Config.NoExtension})
 
 				// Update
-				res.RegisterRoute("PUT", "/", adminController.Update, &RouteConfig{PermissionMode: roles.Update})
+				res.RegisterRoute("PUT", "/", adminController.Update, &RouteConfig{PermissionMode: roles.Update,NoExtension:res.Config.NoExtension})
 			} else {
 				// Edit
-				res.RegisterRoute("GET", path.Join(primaryKeyParams, "edit"), adminController.Edit, &RouteConfig{PermissionMode: roles.Update})
+				res.RegisterRoute("GET", path.Join(primaryKeyParams, "edit"), adminController.Edit, &RouteConfig{PermissionMode: roles.Update,NoExtension:res.Config.NoExtension})
 
 				// Update
  				res.RegisterRoute("POST", primaryKeyParams, adminController.Update, &RouteConfig{PermissionMode: roles.Update,NoExtension:res.Config.NoExtension})
@@ -304,13 +304,13 @@ func (admin *Admin) RegisterResourceRouters(res *Resource, actions ...string) {
 		case "read":
 			if res.Config.Singleton {
 				// Index
-				res.RegisterRoute("GET", "/", adminController.Show, &RouteConfig{PermissionMode: roles.Read})
+				res.RegisterRoute("GET", "/", adminController.Show, &RouteConfig{PermissionMode: roles.Read,NoExtension:res.Config.NoExtension})
 			} else {
 				// Index
-				res.RegisterRoute("GET", "/", adminController.Index, &RouteConfig{PermissionMode: roles.Read})
+				res.RegisterRoute("GET", "/", adminController.Index, &RouteConfig{PermissionMode: roles.Read,NoExtension:res.Config.NoExtension})
 
 				// Show
-				res.RegisterRoute("GET", primaryKeyParams, adminController.Show, &RouteConfig{PermissionMode: roles.Read})
+				res.RegisterRoute("GET", primaryKeyParams, adminController.Show, &RouteConfig{PermissionMode: roles.Read,NoExtension:res.Config.NoExtension})
 			}
 		case "delete":
 			if !res.Config.Singleton {
